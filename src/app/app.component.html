@@ -1,0 +1,20 @@
+<h1>Jeu de la bataille</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <h2>Joueur 1</h2>
+      <app-carte [carteSubject] = "getSigJoueur(1)" [score]="getScore(1)"></app-carte>
+      <button class="btn btn-primary" (click)="piocherJoueur(1)">Piocher</button>
+    </div>
+    <div class="col-md-6">
+      <h2>Joueur 2</h2>
+      <app-carte [carteSubject] = "getSigJoueur(2)" [score]="getScore(2)"></app-carte>
+      <button class="btn btn-primary" (click)="piocherJoueur(2)">Piocher</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <button class="btn btn-primary" (click)="bataille()">Bataille</button>
+    </div>
+  </div>
+</div>

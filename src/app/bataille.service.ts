@@ -37,7 +37,7 @@ export class BatailleService {
         const carte: carte = {
             code: data.cards[0].code,
             image: data.cards[0].image,
-            value: this.calculValeur(data.cards[0])
+            value: this.calculValeur(data.cards[0]),
         };
     
         return carte;

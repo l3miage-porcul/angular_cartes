@@ -18,24 +18,41 @@ export class AppComponent {
   private readonly sigJoueur2 = new BehaviorSubject<carte>(defaultCarte);
   private readonly scoreJoueur1 = new BehaviorSubject<number>(0);
   private readonly scoreJoueur2 = new BehaviorSubject<number>(0);
+  private aJoue1 : boolean = false;
+  private aJoue2 : boolean = false;
+  private nbCartesRestantes: number = 52;
 
-  constructor(private batailleService: BatailleService) {
-    this.piocherJoueur(1);
-    this.piocherJoueur(2);
-  }
+  constructor(private batailleService: BatailleService) {}
 
   async piocherJoueur(Idjoueur: number): Promise<void> {
+
+    if (this.nbCartesRestantes === 0) return;
+
     const carteTiree = await this.batailleService.drawCard();
     Idjoueur === 1 ? this.sigJoueur1.next(carteTiree) : this.sigJoueur2.next(carteTiree);
+    Idjoueur === 1 ? this.aJoue1 = true : this.aJoue2 = true;
+    this.nbCartesRestantes--;
   }
 
   bataille(): void {
 
-    const carteGagnante = this.comparerCartes(this.sigJoueur1.value, this.sigJoueur2.value);
+    if (this.aJoue1 && this.aJoue2 && this.nbCartesRestantes > 0) {
+
+      this.aJoue1 = false;
+      this.aJoue2 = false;
+      
+      const carteGagnante = this.comparerCartes(this.sigJoueur1.value, this.sigJoueur2.value);
+      this.calculScore(carteGagnante);
+    }
+  }
+
+  calculScore(carteGagnante : carte | 'égalité'): void {
     if (carteGagnante === this.sigJoueur1.value) {
       this.scoreJoueur1.next(this.scoreJoueur1.value + 1);
+
     } else if (carteGagnante === this.sigJoueur2.value) {
       this.scoreJoueur2.next(this.scoreJoueur2.value + 1);
+
     } else {
       this.scoreJoueur1.next(this.scoreJoueur1.value + 1);
       this.scoreJoueur2.next(this.scoreJoueur2.value + 1);
@@ -61,5 +78,18 @@ export class AppComponent {
 
   getScore(numero: number): BehaviorSubject<number> {
     return numero === 1 ? this.scoreJoueur1 : this.scoreJoueur2;
+  }
+
+  automaticPlay(): void {
+    this.piocherJoueur(1);
+    this.piocherJoueur(2);
+    this.bataille();
+  }
+
+  jeuAuto() : void{
+    this.automaticPlay();
+    setInterval(() => {
+      this.automaticPlay();
+    }, 2000);
   }
 }

@@ -1,0 +1,18 @@
+#titre{
+    
+    font-size: 2em;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.boutonBataille{
+    margin-top: 10px;
+    text-align: center;
+}
+
+.colonne{
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

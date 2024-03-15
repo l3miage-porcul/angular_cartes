@@ -27,6 +27,8 @@ export class AppComponent {
   async piocherJoueur(Idjoueur: number): Promise<void> {
 
     if (this.nbCartesRestantes === 0) return;
+    if (Idjoueur === 1 && this.aJoue1 == true) return;
+    if (Idjoueur === 2 && this.aJoue2 == true) return;
 
     const carteTiree = await this.batailleService.drawCard();
     Idjoueur === 1 ? this.sigJoueur1.next(carteTiree) : this.sigJoueur2.next(carteTiree);
@@ -63,6 +65,8 @@ export class AppComponent {
     const valeurCarte1 = carte1.value;
     const valeurCarte2 = carte2.value;
     
+    console.log(valeurCarte1, valeurCarte2)
+
     if (valeurCarte1 > valeurCarte2) {
       return carte1;
     } else if (valeurCarte1 < valeurCarte2) {
@@ -80,9 +84,9 @@ export class AppComponent {
     return numero === 1 ? this.scoreJoueur1 : this.scoreJoueur2;
   }
 
-  automaticPlay(): void {
-    this.piocherJoueur(1);
-    this.piocherJoueur(2);
+  async automaticPlay(): Promise<void> {
+    await this.piocherJoueur(1);
+    await this.piocherJoueur(2);
     this.bataille();
   }
 
@@ -90,6 +94,6 @@ export class AppComponent {
     this.automaticPlay();
     setInterval(() => {
       this.automaticPlay();
-    }, 2000);
+    }, 1000);
   }
 }
